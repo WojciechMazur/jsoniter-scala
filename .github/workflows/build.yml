@@ -2,17 +2,7 @@ name: build
 
 on:
   push:
-    paths-ignore:
-      - 'jsoniter-scala-examples/**'
-      - '**.md'
-    branches-ignore:
-      - "gh-pages"
   pull_request:
-    paths-ignore:
-      - 'jsoniter-scala-examples/**'
-      - '**.md'
-    branches-ignore:
-      - "gh-pages"
 
 jobs:
   build:
