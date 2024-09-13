@@ -5,7 +5,7 @@ import scala.sys.process.*
 
 // lazy val oldVersion = "git describe --abbrev=0".!!.trim.replaceAll("^v", "")
 
-resolvers ++= Resolver.sonatypeOssRepos("snapshots")
+ThisBuild / resolvers ++= Resolver.sonatypeOssRepos("snapshots")
 
 lazy val commonSettings = Seq(
   organization := "com.github.plokhotnyuk.jsoniter-scala",
