@@ -5,6 +5,8 @@ import scala.sys.process.*
 
 lazy val oldVersion = "git describe --abbrev=0".!!.trim.replaceAll("^v", "")
 
+resolvers ++= Resolver.sonatypeOssRepos("snapshots"),
+
 lazy val commonSettings = Seq(
   organization := "com.github.plokhotnyuk.jsoniter-scala",
   organizationHomepage := Some(url("https://github.com/plokhotnyuk")),
@@ -93,7 +95,7 @@ lazy val nativeSettings = Seq(
   nativeConfig ~= {
     _.withMode(Mode.releaseFast) // TODO: Test with `Mode.releaseSize` and `Mode.releaseFull`
       .withLTO(LTO.none)
-      .withGC(GC.boehm) // FIXME: Remove after fixing of https://github.com/scala-native/scala-native/issues/4032
+      // .withGC(GC.boehm) // FIXME: Remove after fixing of https://github.com/scala-native/scala-native/issues/4032
   },
   coverageEnabled := false // FIXME: Unexpected linking error
 )
