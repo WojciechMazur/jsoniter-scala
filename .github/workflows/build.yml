@@ -23,6 +23,17 @@ jobs:
         shell: bash
       - uses: actions/checkout@v4
         with:
+          repository: WojciechMazur/scala-native
+          ref: fix/gc-mem-allocation
+          path: sn-repo
+      - name: Build Scala Native locally
+        run: |
+          cd sn-repo
+          sbt "publishLocalDev 2.12.20; publishLocalDev 2.13.14; publishLocalDev 3.3.3"
+          cd ..
+
+      - uses: actions/checkout@v4
+        with:
           fetch-depth: 300
       # - name: Fetch tags
       #   run: git fetch --depth=300 origin +refs/tags/*:refs/tags/*
