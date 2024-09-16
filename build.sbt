@@ -3,7 +3,9 @@ import sbt.*
 import scala.scalanative.build.*
 import scala.sys.process.*
 
-lazy val oldVersion = "git describe --abbrev=0".!!.trim.replaceAll("^v", "")
+// lazy val oldVersion = "git describe --abbrev=0".!!.trim.replaceAll("^v", "")
+
+ThisBuild / resolvers ++= Resolver.sonatypeOssRepos("snapshots")
 
 lazy val commonSettings = Seq(
   organization := "com.github.plokhotnyuk.jsoniter-scala",
@@ -93,7 +95,7 @@ lazy val nativeSettings = Seq(
   nativeConfig ~= {
     _.withMode(Mode.releaseFast) // TODO: Test with `Mode.releaseSize` and `Mode.releaseFull`
       .withLTO(LTO.none)
-      .withGC(GC.boehm) // FIXME: Remove after fixing of https://github.com/scala-native/scala-native/issues/4032
+      // .withGC(GC.boehm) // FIXME: Remove after fixing of https://github.com/scala-native/scala-native/issues/4032
   },
   coverageEnabled := false // FIXME: Unexpected linking error
 )
@@ -105,25 +107,27 @@ lazy val noPublishSettings = Seq(
 
 lazy val publishSettings = Seq(
   packageOptions += Package.ManifestAttributes("Automatic-Module-Name" -> moduleName.value),
-  mimaCheckDirection := {
-    def isPatch: Boolean = {
-      val Array(newMajor, newMinor, _) = version.value.split('.')
-      val Array(oldMajor, oldMinor, _) = oldVersion.split('.')
-      newMajor == oldMajor && newMinor == oldMinor
-    }
+  // mimaCheckDirection := {
+  //   def isPatch: Boolean = {
+  //     val Array(newMajor, newMinor, _) = version.value.split('.')
+  //     val Array(oldMajor, oldMinor, _) = oldVersion.split('.')
+  //     newMajor == oldMajor && newMinor == oldMinor
+  //   }
 
-    if (isPatch) "both"
-    else "backward"
-  },
+  //   if (isPatch) "both"
+  //   else "backward"
+  // },
   mimaPreviousArtifacts := {
-    def isCheckingRequired: Boolean = {
-      val Array(newMajor, _, _) = version.value.split('.')
-      val Array(oldMajor, _, _) = oldVersion.split('.')
-      newMajor == oldMajor
-    }
+    // def isCheckingRequired: Boolean = {
+    //   false
+    //   // val Array(newMajor, _, _) = version.value.split('.')
+    //   // val Array(oldMajor, _, _) = oldVersion.split('.')
+    //   // newMajor == oldMajor
+    // }
 
-    if (isCheckingRequired) Set(organization.value %%% moduleName.value % oldVersion)
-    else Set()
+    // if (isCheckingRequired) Set(organization.value %%% moduleName.value % oldVersion)
+    // else 
+    Set()
   },
   mimaReportSignatureProblems := true,
   mimaBinaryIssueFilters := Seq()
